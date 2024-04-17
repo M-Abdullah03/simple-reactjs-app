@@ -16,13 +16,8 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Start a new stage from nginx
-FROM nginx:alpine
+# Expose port 3000 for the application
+EXPOSE 3000
 
-# Copy the build output to replace the default nginx contents.
-COPY --from=build /app/build /usr/share/nginx/html
-
-# Expose port 80 for the application
-EXPOSE 80
-
-# Nginx starts automatically so no need to start it again
+# Start the application
+CMD [ "npm", "start" ]
