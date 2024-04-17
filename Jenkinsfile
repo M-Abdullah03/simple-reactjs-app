@@ -13,29 +13,24 @@ pipeline {
                 bat 'npm install'
             }
         }
-
+        
         stage('Build Docker Image') {
             steps {
-                script {
-                    docker.build("my-react-app")
-                }
+                bat 'docker build -t my-react-app .'
             }
         }
-
+        
         stage('Run Docker Image') {
             steps {
-                script {
-                    docker.image("my-react-app").run()
-                }
+                bat 'docker run -d --name my-react-app-instance my-react-app'
             }
         }
-
+        
         stage('Push Docker Image') {
             steps {
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                        docker.image("my-react-app").push()
-                    }
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    bat 'docker login -u %DOCKER_USERNAME% -p %DOCKER_PASSWORD%'
+                    bat 'docker push my-react-app'
                 }
             }
         }
