@@ -21,7 +21,7 @@ pipeline {
         
         stage('Run Docker Image') {
             steps {
-                bat 'docker run -d --name mab3825/my-react-app-instance my-react-app'
+                bat 'docker run -d my-react-app-instance mab3825/my-react-app'
             }
         }
         
