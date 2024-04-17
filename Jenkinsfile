@@ -13,7 +13,13 @@ pipeline {
                 bat 'npm install'
             }
         }
-        
+        stage('Login to Docker Hub') {
+    steps {
+        withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+            bat 'docker login -u %DOCKER_USERNAME% -p %DOCKER_PASSWORD%'
+        }
+    }
+}
         stage('Build Docker Image') {
             steps {
                 bat 'docker build -t my-react-app .'
