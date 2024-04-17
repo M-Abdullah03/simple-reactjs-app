@@ -22,7 +22,9 @@ pipeline {
         }
         stage('Run Docker Image') {
             steps {
-                bat 'docker run -d my-react-app-instance my-react-app'
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    bat 'docker run -d %DOCKER_USERNAME%/my-react-app'
+                }
             }
         }
         
